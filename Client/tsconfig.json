@@ -1,21 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": true, // Enables all strict type-checking options
+    "noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type
+    "strictNullChecks": true, // Enable strict null checking
+    "strictFunctionTypes": true, // Ensure functions' parameters are correctly typed
+    "strictPropertyInitialization": true, // Ensure non-undefined class properties are initialized in the constructor
+    "esModuleInterop": true, // Enables module interop
+    "skipLibCheck": true, // Skip type checking of all declaration files (*.d.ts)
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
+    "module": "esnext",
+    "target": "es6",
+    "moduleResolution": "node"
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"]
 }
