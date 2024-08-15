@@ -1,40 +1,64 @@
-import React , {useState} from 'react';
-import {DndContext} from '@dnd-kit/core';
-import { DragEndEvent } from '@dnd-kit/core';
-
-
+// src/components/DragAndDrop.tsx
+import React, { useState } from 'react';
+import { DndContext, DragEndEvent, UniqueIdentifier } from '@dnd-kit/core';
 import Draggable from './Draggable';
 import Droppable from './Droppable';
 
+function DragAndDrop() {
+  const [droppedItems, setDroppedItems] = useState<Record<string, Array<{id: string, emoji: string}>>>({}); // Array of emoji objects
+  const emojis = [
+    { id: 'emoji-1', emoji: '😀' }, 
+    { id: 'emoji-2', emoji: '😃' },
+    { id: 'emoji-3', emoji: '😄' },
+    { id: 'emoji-4', emoji: '😁' },
+    { id: 'emoji-5', emoji: '😆' }
+  ]; // Emoji objects with ID and character
+  const containers = ['dropzone1', 'dropzone2']; // Droppable zones
 
-function App() {
-  const containers = ['A', 'B', 'C'];
-  const [parent, setParent] = useState(null);
-  const draggableMarkup = (
-    <Draggable id="draggable">Drag me</Draggable>
-  );
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over) {
+      const droppedZone = String(over.id); // Convert to string to ensure type safety
+      const draggedItem = emojis.find(emoji => emoji.id === active.id);
+
+      if (draggedItem) {
+        setDroppedItems(prevItems => {
+          const newItems = { ...prevItems };
+          const targetList = newItems[droppedZone] || [];
+          targetList.push(draggedItem);  // Add the dragged item to the target list
+          newItems[droppedZone] = targetList;
+          return newItems;
+        });
+      }
+    } else if (!over) {
+      // Remove the item from any droppable if it's dragged out
+      setDroppedItems(prevItems => {
+        const newItems = { ...prevItems };
+        Object.keys(newItems).forEach(key => {
+          newItems[key] = newItems[key].filter(item => item.id !== active.id);
+        });
+        return newItems;
+      });
+    }
+  };
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      {parent === null ? draggableMarkup : null}
+      {emojis.map(emoji => (
+        <Draggable key={emoji.id} id={emoji.id} emoji={emoji.emoji} />
+      ))}
 
-      {containers.map((id) => (
-        // We updated the Droppable component so it would accept an `id`
-        // prop and pass it to `useDroppable`
+      {containers.map(id => (
         <Droppable key={id} id={id}>
-          {parent === id ? draggableMarkup : 'Drop here'}
+          {droppedItems[id]?.map((item, idx) => (
+            <Draggable key={idx} id={item.id} emoji={item.emoji} />
+          ))}
+          {!droppedItems[id]?.length && 'Drop here'}
         </Droppable>
       ))}
     </DndContext>
   );
+}
 
-  function handleDragEnd(event: { over: any; }) {
-    const {over} = event;
-
-    // If the item is dropped over a container, set it as the parent
-    // otherwise reset the parent to `null`
-    setParent(over ? over.id : null);
-  }
-};
-
-export default App
+export default DragAndDrop;

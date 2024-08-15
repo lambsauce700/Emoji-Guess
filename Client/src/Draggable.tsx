@@ -1,26 +1,26 @@
-import React, { ReactNode } from 'react';
-import {useDraggable} from '@dnd-kit/core';
+import React from 'react';
+import { useDraggable } from '@dnd-kit/core';
 
-type DroppableProps = {
-    id: string
-    children: ReactNode;
-  };
+type DraggableProps = {
+  id: string;
+  emoji: string;
+};
 
-
-function Draggable(props: DroppableProps) {
-  const {attributes, listeners, setNodeRef, transform} = useDraggable({
-    id: 'draggable',
+const Draggable: React.FC<DraggableProps> = ({ id, emoji }) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: id,
   });
+
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    cursor: 'grabbing',
   } : undefined;
 
-  
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
-      {props.children}
-    </button>
+    <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+      {emoji}
+    </div>
   );
-}
+};
 
-export default Draggable
+export default Draggable;
