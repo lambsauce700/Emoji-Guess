@@ -4,7 +4,13 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true         // Enforce consistent casing in file names
+
   },
-  "include": ["./*.ts"]
+  "include": ["./*.ts"],
+  "exclude": ["node_modules"]                        // Exclude node_modules
+
 }

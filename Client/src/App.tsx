@@ -3,6 +3,14 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 import axios from 'axios'
 
+
+
+type User = {
+  id: number;
+  name: string;
+};
+
+
 function App() {
   const [count, setCount] = useState(0)
   const [array, setArray] = useState([])
@@ -10,8 +18,8 @@ function App() {
 
   const fetchAPI = async () => {
     const response = await axios.get("http://localhost:8080/api");
-    setArray(response.data.fruits);
-    console.log(response.data.fruits);
+    setArray(response.data);
+    console.log(response.data);
   };
 
 useEffect(() => {
@@ -36,9 +44,9 @@ useEffect(() => {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
         {
-          array.map((fruit , index) =>(
-            <div key={index}>
-              <p>{fruit}</p>
+          array.map((allUsers) =>( 
+            <div key={allUsers['id']}>
+              <p>{allUsers['name']}</p>
               <br />
             </div>
           ))
